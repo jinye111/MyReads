@@ -25,8 +25,9 @@ class BooksApp extends React.Component {
     }) 
   }
   updateBooks=(book,shelf) => {
-    BooksAPI.update(book,shelf);
-    this.getAllbooks(); 
+    BooksAPI.update(book,shelf).then(() => {
+        this.getAllbooks();
+      });
   }
   componentDidMount() {
     this.getAllbooks();  
@@ -34,7 +35,7 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-          <Route path="/search" component={Search}/>
+          <Route path="/search" render={() => ( <Search update={this.updateBooks} books={this.state} />)} />
           <Route exact path="/" render={()=>(
             <div className="list-books">
               <Head />

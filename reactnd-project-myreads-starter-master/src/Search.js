@@ -13,15 +13,36 @@ class Search extends Component{
 
 	searchBooks = (query)=>{
 		console.log(query)
-		BooksAPI.search(query).then((books)=>{this.setState({re:books})})
+		BooksAPI.search(query)
+			.then((books)=>{
+				console.log(this.props.books);
+				books.forEach((book)=>{
+					this.props.books.current.forEach((c)=>{
+						if (book.title===c.title) {
+							book.shelf=c.shelf;
+						}
+					})
+
+					this.props.books.want.forEach((w)=>{
+						if (book.title===w.title) {
+							book.shelf=w.shelf;
+						}
+					})
+					this.props.books.read.forEach((r)=>{
+						if (book.title===r.title) {
+							book.shelf=r.shelf;
+						}
+					})
+				})
+				this.setState({re:books})
+			})
 	}
 
-	update = (book,shelf)=>{
-		BooksAPI.update(book,shelf);
-	}
+	
 
 	render(){
 		console.log(this.state)
+
 		return (
 			<div className="search-books">
 		        <div className="search-books-bar">
@@ -35,7 +56,7 @@ class Search extends Component{
 		          </div>
 		        </div>
 		        <div className="search-books-results">
-		 			<Content books={this.state.re} update={this.update}/>
+		 			<Content books={this.state.re} update={this.props.update}/>
 		        </div>
           	</div>
 		)
